@@ -43,7 +43,7 @@
 +(MMDrawerControllerDrawerVisualStateBlock)slideVisualStateBlock;
 
 /**
- Creates a swinging door visual state block that gives the user an experience that animates the drawer in along the hinge. 
+ Creates a swinging door visual state block that gives the user an experience that animates the drawer in along the hinge.
  
  @return The visual state block.
  */

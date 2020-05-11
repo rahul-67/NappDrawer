@@ -2,9 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 2.1.1
-apiversion: 2
-architectures: armv7 i386 x86_64 arm64
+version: 3.0.0
 description: Drawer controller
 author: Mads Møller
 license: MIT
@@ -15,4 +13,5 @@ name: NappDrawer
 moduleid: dk.napp.drawer
 guid: 2a446559-1d59-4808-aefc-7d02d3130ebb
 platform: iphone
-minsdk: 5.5.0
+minsdk: 8.0.0.GA
+architectures: armv7 arm64 i386 x86_64

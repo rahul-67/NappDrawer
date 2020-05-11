@@ -9,7 +9,7 @@
  * and licensed under the Apache Public License (version 2)
  */
 
-#import "MMDrawerController.h"
+#import "MMDrawerController/MMDrawerController/MMDrawerController.h"
 
 typedef void windowAppearanceChange;
 

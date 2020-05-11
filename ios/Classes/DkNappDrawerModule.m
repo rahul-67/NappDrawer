@@ -7,11 +7,11 @@
  * and licensed under the Apache Public License (version 2)
  */
 #import "DkNappDrawerModule.h"
-#import "TiBase.h"
-#import "TiHost.h"
-#import "TiUtils.h"
+#import <TitaniumKit/TiBase.h>
+#import <TitaniumKit/TiHost.h>
+#import <TitaniumKit/TiUtils.h>
+#import "MMDrawerController/MMDrawerController/MMDrawerController.h"
 
-#import "MMDrawerController.h"
 
 @implementation DkNappDrawerModule
 
@@ -88,17 +88,21 @@ MAKE_SYSTEM_PROP(STATUSBAR_ANIMATION_SLIDE, 2);
 
 - (void)showStatusBar:(id)args
 {
-  ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
-  ENSURE_UI_THREAD(showStatusBar, args);
+    DebugLog(@"[MOD] showStatusBar");
+             
+    ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
+    ENSURE_UI_THREAD(showStatusBar, args);
 
-  int style = [TiUtils intValue:@"animationStyle" properties:args def:UIStatusBarAnimationSlide];
-  [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:style];
+    int style = [TiUtils intValue:@"animationStyle" properties:args def:UIStatusBarAnimationSlide];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:style];
 }
 
 - (void)setStatusBarStyle:(NSNumber *)style
 {
-  ENSURE_UI_THREAD(setStatusBarStyle, style);
-  [[UIApplication sharedApplication] setStatusBarStyle:[style intValue]];
+    DebugLog(@"[MOD] setStatusBarStyle_ %@", style);
+
+    ENSURE_UI_THREAD(setStatusBarStyle, style);
+    //[[[UIApplication sharedApplication] valueForKey:@"statusBar"] setBackgroundColor:UIColor.whiteColor];
 }
 
 @end

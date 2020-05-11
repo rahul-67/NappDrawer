@@ -9,7 +9,7 @@
 
 #import "DkNappDrawerDrawerProxy.h"
 #import "DkNappDrawerDrawer.h"
-#import "TiUtils.h"
+#import <TitaniumKit/TiUtils.h>
 
 @implementation DkNappDrawerDrawerProxy
 

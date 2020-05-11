@@ -30,14 +30,14 @@
 ///---------------------------------------
 /// @name Gesture Interaction
 ///---------------------------------------
-/** 
+/**
  `MMDrawerController`'s single-tap gesture recognizer callback. This method is called every time the `UITapGestureRecognizer` is triggered.
  
  @param tapGesture The single-tap gesture recognizer instance that triggered the callback
  */
 -(void)tapGestureCallback:(UITapGestureRecognizer *)tapGesture __attribute((objc_requires_super));
 
-/** 
+/**
  `MMDrawerController`'s pan gesture recognizer callback. This method is called every time the `UIPanGestureRecognizer` is updated.
  
  @warning This method do the minimal amount of work to keep the pan gesture responsive.
@@ -57,7 +57,7 @@
 ///---------------------------------------
 /// @name Drawer Presentation
 ///---------------------------------------
-/** 
+/**
  Sets the initial conditions for `MMDrawerController` and its child view controllers to prepare the drawer for a transition. If a drawer is open and the opposite drawer is being presented, it prepares that drawer to be hidden and vice-versa for the closing drawer.
  
  @param drawer The drawer side that will be presented
@@ -100,7 +100,7 @@
  */
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration __attribute((objc_requires_super));
 
-/** 
+/**
  Included here to ensure subclasses call `super`.
  
  @param toInterfaceOrientation The interface orientation that the interface is moving to

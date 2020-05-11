@@ -7,7 +7,7 @@
  * and licensed under the Apache Public License (version 2)
  */
 
-#import "MMDrawerController.h"
+#import "MMDrawerController/MMDrawerController/MMDrawerController.h"
 #import <Foundation/Foundation.h>
 
 @interface NappDrawerVisualState : NSObject

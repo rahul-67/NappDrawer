@@ -9,16 +9,17 @@
 
 #import "CustomMMDrawerController.h"
 #import "NappDrawerVisualState.h"
-#import "TiBase.h"
-#import "TiUIView.h"
-#import "TiUIiOSNavWindowProxy.h"
+#import <TitaniumKit/TiBase.h>
+#import <TitaniumKit/TiUIView.h>
+#import "TiUINavigationWindowProxy.h"
 
 #import <QuartzCore/QuartzCore.h>
 
 @interface DkNappDrawerDrawer : TiUIView {
   @private
   CustomMMDrawerController *controller;
-  TiUIiOSNavWindowProxy *navProxy;
+
+  TiUINavigationWindowProxy *navProxy;
 
   NSMutableArray *_accessibleElements;
 

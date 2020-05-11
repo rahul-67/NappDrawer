@@ -9,9 +9,9 @@
 
 #import "DkNappDrawerDrawer.h"
 #import "DkNappDrawerDrawerProxy.h"
-#import "TiUIiOSNavWindowProxy.h"
-#import "TiUtils.h"
-#import "TiViewController.h"
+#import "TiUINavigationWindowProxy.h"
+#import <TitaniumKit/TiUtils.h>
+#import <TitaniumKit/TiViewController.h>
 
 UIViewController *ControllerForViewProxy(TiViewProxy *proxy);
 
@@ -29,7 +29,7 @@ UIViewController *ControllerForViewProxy(TiViewProxy *proxy)
   return [[TiViewController alloc] initWithViewProxy:proxy];
 }
 
-UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *proxy)
+UINavigationController *NavigationControllerForViewProxy(TiUINavigationWindowProxy *proxy)
 {
   return [proxy controller];
 }
@@ -92,7 +92,7 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
     // Check in centerWindow is a UINavigationController
     BOOL useNavController = NO;
-    if ([[[[self.proxy valueForUndefinedKey:@"centerWindow"] class] description] isEqualToString:@"TiUIiOSNavWindowProxy"]) {
+    if ([[[[self.proxy valueForUndefinedKey:@"centerWindow"] class] description] isEqualToString:@"TiUINavigationWindowProxy"]) {
       useNavController = YES;
     }
 
@@ -111,7 +111,7 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
         TiViewController *leftController = ControllerForViewProxy(leftWindow);
         TiViewController *rightController = ControllerForViewProxy(rightWindow);
 
-        TiUIiOSNavWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
+        TiUINavigationWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
 
         TiThreadPerformOnMainThread(^{
           [centerProxy windowWillOpen];
@@ -127,7 +127,7 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
         TiViewController *leftController = ControllerForViewProxy(leftWindow);
 
-        TiUIiOSNavWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
+        TiUINavigationWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
 
         TiThreadPerformOnMainThread(^{
           [centerProxy windowWillOpen];
@@ -143,7 +143,7 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
       TiViewController *rightController = ControllerForViewProxy(rightWindow);
 
-      TiUIiOSNavWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
+      TiUINavigationWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
 
       TiThreadPerformOnMainThread(^{
         [centerProxy windowWillOpen];
@@ -259,12 +259,12 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 {
   ENSURE_UI_THREAD(setCenterWindow_, args);
   BOOL useNavController = NO;
-  if ([[[args class] description] isEqualToString:@"TiUIiOSNavWindowProxy"]) {
+  if ([[[args class] description] isEqualToString:@"TiUINavigationWindowProxy"]) {
     useNavController = YES;
   }
   UIViewController *centerWindow = useNavController ? NavigationControllerForViewProxy([self.proxy valueForUndefinedKey:@"centerWindow"]) : ControllerForViewProxy([self.proxy valueForUndefinedKey:@"centerWindow"]);
   if (useNavController) {
-    TiUIiOSNavWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
+    TiUINavigationWindowProxy *centerProxy = [self.proxy valueForUndefinedKey:@"centerWindow"];
 
     if (controller != nil) {
       [centerProxy windowWillOpen];
@@ -350,9 +350,10 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
 - (void)setAnimationVelocity_:(id)args
 {
-  ENSURE_UI_THREAD(setAnimationVelocity_, args);
-  ENSURE_SINGLE_ARG(args, NSNumber);
-  [controller setAnimationVelocity:[TiUtils floatValue:args]];
+    ENSURE_UI_THREAD(setAnimationVelocity_, args);
+    ENSURE_SINGLE_ARG(args, NSNumber);
+    [controller setAnimationVelocityLeft:[TiUtils floatValue:args]];
+    [controller setAnimationVelocityRight:[TiUtils floatValue:args]];
 }
 
 - (void)setShowShadow_:(id)args
@@ -364,9 +365,10 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
 - (void)setShouldStretchDrawer_:(id)args
 {
-  ENSURE_UI_THREAD(setShouldStretchDrawer_, args);
-  ENSURE_SINGLE_ARG(args, NSNumber);
-  [controller setShouldStretchDrawer:[TiUtils boolValue:args]];
+    ENSURE_UI_THREAD(setShouldStretchDrawer_, args);
+    ENSURE_SINGLE_ARG(args, NSNumber);
+    [controller setShouldStretchLeftDrawer:[TiUtils boolValue:args]];
+    [controller setShouldStretchRightDrawer:[TiUtils boolValue:args]];
 }
 
 - (void)setShowsStatusBarBackgroundView_:(id)args
@@ -378,7 +380,15 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    DebugLog(@"[VIEW] preferredStatusBarStyle %@", [self.proxy valueForUndefinedKey:@"statusBarStyle"]);
+    
+    if ([self.proxy valueForUndefinedKey:@"statusBarStyle"] != nil) {
+        NSNumber *style = [self.proxy valueForUndefinedKey:@"statusBarStyle"];
+        return [style intValue];
+    }
+    
   return [controller preferredStatusBarStyle];
+    
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle
@@ -388,8 +398,12 @@ UINavigationController *NavigationControllerForViewProxy(TiUIiOSNavWindowProxy *
 
 - (void)setStatusBarStyle_:(NSNumber *)style
 {
-  ENSURE_UI_THREAD(setStatusBarStyle_, style);
-  [[UIApplication sharedApplication] setStatusBarStyle:[style intValue]];
+    DebugLog(@"[DkNapp] setStatusBarStyle_ %@", [self.proxy valueForUndefinedKey:@"statusBarStyle"]);
+    
+    ENSURE_UI_THREAD(setStatusBarStyle_, style);
+    [[UIApplication sharedApplication] setStatusBarStyle:[style intValue]];
+    
+    [controller setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)setAnimationMode_:(id)args

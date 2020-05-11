@@ -13,13 +13,21 @@
 
 @implementation CustomMMDrawerController
 
+-(BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)openDrawerSide:(MMDrawerSide)drawerSide animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
   [super openDrawerSide:drawerSide
                animated:animated
              completion:^(BOOL finished) {
                if (finished) {
-                 _callback(@"open");
+                   self->_callback(@"open");
                }
              }];
 }
@@ -29,7 +37,7 @@
   [super closeDrawerAnimated:animated
                   completion:^(BOOL finished) {
                     if (finished) {
-                      _callback(@"close");
+                        self->_callback(@"close");
                     }
                   }];
 }

@@ -38,7 +38,7 @@
 
 @implementation MMDrawerMenuButtonView
 
--(id)initWithFrame:(CGRect)frame{
+-(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
         [self setMenuButtonNormalColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9f]];
@@ -125,7 +125,7 @@
     //// Color Declarations
     UIColor*  buttonColor = [self menuButtonColorForState:self.state];
     UIColor*  shadowColor = [self shadowColorForState:self.state];
-
+    
     
     //// Shadow Declarations
     UIColor* shadow =  shadowColor;
@@ -189,7 +189,7 @@
 }
 
 -(void)tintColorDidChange{
-     [self setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 
 @end
@@ -206,7 +206,7 @@
     static UIImage *drawerButtonImage = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-
+        
         UIGraphicsBeginImageContextWithOptions( CGSizeMake(26, 26), NO, 0 );
         
         //// Color Declarations
@@ -238,7 +238,7 @@
     return drawerButtonImage;
 }
 
--(id)initWithTarget:(id)target action:(SEL)action{
+-(instancetype)initWithTarget:(id)target action:(SEL)action{
     
     if((floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)){
         return [self initWithImage:[self.class drawerButtonItemImage]
@@ -255,26 +255,20 @@
         }
         self.action = action;
         self.target = target;
-
-        // Enable accessibility
-        self.isAccessibilityElement = YES;
-        self.accessibilityLabel = NSLocalizedString(@"Menu", nil);
-        self.accessibilityHint = NSLocalizedString(@"Toggles the menu", nil);
-
         return self;
     }
 }
 
--(id)initWithCoder:(NSCoder *)aDecoder{
+-(instancetype)initWithCoder:(NSCoder *)aDecoder{
     // non-ideal way to get the target/action, but it works
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCoder: aDecoder];
     return [self initWithTarget:barButtonItem.target action:barButtonItem.action];
 }
 
 -(void)touchUpInside:(id)sender{
-
+    
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"    
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     [self.target performSelector:self.action withObject:sender];
 #pragma clang diagnostic pop;
     
